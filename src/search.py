@@ -215,11 +215,11 @@ class SearchManager(object):
         user = self.users[id]
 
         # get organization name
-        if models.USER_FIELD_ORGANIZATION_ID in user:
+        try:
             org_id = user[models.USER_FIELD_ORGANIZATION_ID]
             org = self.organizations[org_id]
             org_name = org[models.ORGANIZATION_FIELD_NAME]
-        else:
+        except Exception:
             org_name = "null"
 
         # get tickets
@@ -233,8 +233,10 @@ class SearchManager(object):
                          list(assigned_ticket_ids))
         tickets = []
         for tid in ticket_ids:
-            ticket = self.tickets[tid]
-            tickets.append(ticket[models.TICKET_FIELD_SUBJECT])
+            if tid in self.tickets:
+                ticket = self.tickets[tid]
+                if models.TICKET_FIELD_SUBJECT in ticket:
+                    tickets.append(ticket[models.TICKET_FIELD_SUBJECT])
 
         # construct the user string
         ret = ""
@@ -255,27 +257,27 @@ class SearchManager(object):
         ticket = self.tickets[id]
 
         # get organization name
-        if models.TICKET_FIELD_ORGANIZATION_ID in ticket:
+        try:
             org_id = ticket[models.TICKET_FIELD_ORGANIZATION_ID]
             org = self.organizations[org_id]
             org_name = org[models.ORGANIZATION_FIELD_NAME]
-        else:
+        except Exception:
             org_name = "null"
 
         # get submitter name
-        if models.TICKET_FIELD_SUBMITTER_ID in ticket:
+        try:
             submitter_id = ticket[models.TICKET_FIELD_SUBMITTER_ID]
             submitter = self.users[submitter_id]
             submitter_name = submitter[models.USER_FIELD_NAME]
-        else:
+        except Exception:
             submitter_name = "null"
 
         # get assignee name
-        if models.TICKET_FIELD_ASSIGNEE_ID in ticket:
+        try:
             assignee_id = ticket[models.TICKET_FIELD_ASSIGNEE_ID]
             assignee = self.users[assignee_id]
             assignee_name = assignee[models.USER_FIELD_NAME]
-        else:
+        except Exception:
             assignee_name = "null"
 
         # construct the ticket string
@@ -302,8 +304,10 @@ class SearchManager(object):
         )
         users = []
         for uid in user_ids:
-            user = self.users[uid]
-            users.append(user[models.USER_FIELD_NAME])
+            if uid in self.users:
+                user = self.users[uid]
+                if models.USER_FIELD_NAME in user:
+                    users.append(user[models.USER_FIELD_NAME])
 
         # get tickets
         ticket_ids = self._get_ids(
@@ -311,8 +315,10 @@ class SearchManager(object):
         )
         tickets = []
         for tid in ticket_ids:
-            ticket = self.tickets[tid]
-            tickets.append(ticket[models.TICKET_FIELD_SUBJECT])
+            if tid in user.tickets:
+                ticket = self.tickets[tid]
+                if models.TICKET_FIELD_SUBJECT in ticket:
+                    tickets.append(ticket[models.TICKET_FIELD_SUBJECT])
 
         # construct the user string
         ret = ""
