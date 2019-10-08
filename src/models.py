@@ -34,7 +34,6 @@ ORGANIZATION_FIELDS = [
     ORGANIZATION_FIELD_TAGS
 ]
 
-
 # User
 '''
 User

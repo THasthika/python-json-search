@@ -1,12 +1,27 @@
 import unittest
 
-from .search import Search
+import search
 
 
 class TestSearch(unittest.TestCase):
 
     def test_init(self):
+        s = search.SearchManager.getInstance()
+        self.assertIsNotNone(s)
 
-        s = Search.getInstance()
+    def test_search_empty(self):
+        res = search.SearchManager.getInstance().search(
+            search.SEARCH_TYPE_USER, '_id', 0)
+        self.assertIsNone(res)
 
-        print(s)
+    def test_search_not_empty(self):
+        res = search.SearchManager.getInstance().search(
+            search.SEARCH_TYPE_USER, '_id', 1
+        )
+        self.assertIsNotNone(res)
+
+    def test_search_tickets_pending(self):
+        res = search.SearchManager.getInstance().search(
+            search.SEARCH_TYPE_TICKET, 'status', 'pending'
+        )
+        self.assertIsNotNone(res)

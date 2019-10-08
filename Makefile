@@ -1,4 +1,7 @@
-.PHONY: all
+.PHONY: all test
 
 all:
-	python src/main.py
+	cd src/ && python main.py
+
+test:
+	cd src/ && python -m unittest -v

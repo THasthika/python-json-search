@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 
-from prompt import AppPrompt
+import prompt
+import search
 
 
 def main():
-
-    AppPrompt().cmdloop()
+    search.SearchManager.getInstance()
+    prompt.SearchAppPrompt().loop()
 
 
 if __name__ == "__main__":
-
     main()
