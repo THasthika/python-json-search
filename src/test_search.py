@@ -25,3 +25,9 @@ class TestSearch(unittest.TestCase):
             search.SEARCH_TYPE_TICKET, 'status', 'pending'
         )
         self.assertIsNotNone(res)
+
+    def test_search_user_active(self):
+        res = search.SearchManager.getInstance().search(
+            search.SEARCH_TYPE_USER, 'active', True
+        )
+        self.assertIsNotNone(res)

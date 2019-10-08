@@ -220,7 +220,7 @@ class SearchManager(object):
             org = self.organizations[org_id]
             org_name = org[models.ORGANIZATION_FIELD_NAME]
         else:
-            org_name = "NULL"
+            org_name = "null"
 
         # get tickets
         submitted_ticket_ids = self._get_ids(
@@ -260,7 +260,7 @@ class SearchManager(object):
             org = self.organizations[org_id]
             org_name = org[models.ORGANIZATION_FIELD_NAME]
         else:
-            org_name = "NULL"
+            org_name = "null"
 
         # get submitter name
         if models.TICKET_FIELD_SUBMITTER_ID in ticket:
@@ -268,7 +268,7 @@ class SearchManager(object):
             submitter = self.users[submitter_id]
             submitter_name = submitter[models.USER_FIELD_NAME]
         else:
-            submitter_name = "NULL"
+            submitter_name = "null"
 
         # get assignee name
         if models.TICKET_FIELD_ASSIGNEE_ID in ticket:
@@ -276,7 +276,7 @@ class SearchManager(object):
             assignee = self.users[assignee_id]
             assignee_name = assignee[models.USER_FIELD_NAME]
         else:
-            assignee_name = "NULL"
+            assignee_name = "null"
 
         # construct the ticket string
         ret = ""

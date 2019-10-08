@@ -23,6 +23,19 @@ def sanitize_input(type, field, value):
         models.TICKET_FIELD_ASSIGNEE_ID
     ]:
         return int(value)
+    if field in [
+        models.USER_FIELD_ACTIVE,
+        models.USER_FIELD_VERIFIED,
+        models.USER_FIELD_SHARED,
+        models.USER_FIELD_SUSPENDED,
+        models.ORGANIZATION_FIELD_SHARED_TICKETS,
+        models.TICKET_FIELD_HAS_INCIDENTS
+    ]:
+        if value.lower() == 'true' or value.lower() == 'yes':
+            return True
+        elif value.lower() == 'false' or value.lower() == 'no':
+            return False
+        raise Exception('invalid input')
     return value
 
 
@@ -65,8 +78,7 @@ class SearchAppPrompt(object):
         inp = input("> ")
 
         if self.state == _STATE_START:
-            if inp == '':
-                self.state = _STATE_ENTER_TYPE
+            self.state = _STATE_ENTER_TYPE
 
         elif self.state == _STATE_ENTER_TYPE:
             valid = True
@@ -76,7 +88,7 @@ class SearchAppPrompt(object):
                 self.stype = search.SEARCH_TYPE_TICKET
             elif inp == '3':
                 self.stype = search.SEARCH_TYPE_ORGANIZATION
-            else:
+            elif inp != 'quit':
                 print("please select a valid search type!")
                 valid = False
             if valid:
@@ -107,15 +119,21 @@ class SearchAppPrompt(object):
                     print("Organization Fields:")
                 print("\n".join(fields))
                 print("")
+                return
 
             if inp not in fields:
-                print("incorrect search field!")
+                if inp != 'quit':
+                    print("incorrect search field!")
             else:
                 self.sfield = inp
                 self.state = _STATE_ENTER_VALUE
 
         elif self.state == _STATE_ENTER_VALUE:
-            self.svalue = sanitize_input(self.stype, self.sfield, inp)
+            try:
+                self.svalue = sanitize_input(self.stype, self.sfield, inp)
+            except Exception:
+                print("invalid input value")
+                return
             self.state = _STATE_SHOWING_RESULT
             result = search.SearchManager.getInstance().search(
                 self.stype,
